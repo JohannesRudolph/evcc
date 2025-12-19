@@ -58,8 +58,16 @@
       "chargers": "Elektromobilių įkrovikliai",
       "generic": "Tipinės integracijos",
       "heatingdevices": "Šildymo prietaisai",
+      "ocppConfirmContinue": "Jūsų įkroviklis dar neprisijungė prie evcc. Ar tikrai norite tęsti?",
+      "ocppConnected": "Prijungta!",
+      "ocppDescription": "evcc turi integruotą OCPP serverį. Atlikite šiuos veiksmus:",
       "ocppHelp": "Nukopijuokite šį URL į savo įkroviklio konfigūraciją. Išsamesnės informacijos ieškokite gamintojo vadove. Įkroviklis automatiškai pridės savo unikalų identifikatorių (stoties ID) prie URL. Retais atvejais gali tekti rankiniu būdu nurodyti identifikatorių. Pavyzdys: `{url}`",
       "ocppLabel": "OCPP-Serverio URL",
+      "ocppNextStep": "Kitas žingsnis",
+      "ocppStep1": "Sukonfigūruokite įkroviklį, kad jis naudotų evcc kaip OCPP serverį.",
+      "ocppStep2": "Palaukite, kol įkroviklis prisijungs prie evcc.",
+      "ocppStep3": "Tęskite ir užbaikite konfigūraciją.",
+      "ocppWaiting": "Laukiama ryšio",
       "switchsockets": "Išmanios rozetės",
       "template": "Gamintojas",
       "titleAdd": {
@@ -109,10 +117,12 @@
       "chargedEnergy": "Įkrauta",
       "co2": "Tinklo CO₂",
       "configured": "Sukonfigūruota",
+      "connections": "Sąsajos",
       "controllable": "Valdomas",
       "currency": "Valiuta",
       "current": "Srovė",
       "currentRange": "Srovė",
+      "detected": "Aptikta",
       "dimmed": "Galia sumažinta",
       "enabled": "Aktyvuotas",
       "energy": "Energija",
@@ -474,6 +484,23 @@
       "labelSchema": "Schema",
       "title": "Tinklas"
     },
+    "ocpp": {
+      "connectedChargers": "Prijungti įkrovikliai",
+      "connectionStatus": "Esami stotelių ID",
+      "connectionStatusHelp": "Sukonfigūruotų įkroviklių ryšio būsena.",
+      "detectedChargers": "Atpažinti stotelių ID",
+      "detectedHelp": "Šie įkrovikliai bandė prisijungti prie evcc. Norėdami naudoti įkroviklį, sukurkite įkroviklį su jo stotelės ID.",
+      "noChargers": "Neaptikta jokių OCPP įkroviklių.",
+      "noStations": "Nėra prijungtų stotelių",
+      "status": {
+        "configured": "Neprijungta",
+        "connected": "Prijungta",
+        "unknown": "Nežinomas"
+      },
+      "title": "OCPP Serveris",
+      "url": "Serverio URL",
+      "urlHelp": "Nukopijuokite šį URL į savo įkroviklio konfigūraciją. Išsamesnės informacijos ieškokite gamintojo vadove. Įkroviklis turėtų automatiškai pridėti savo unikalų identifikatorių (stotelės ID) prie URL. Retais atvejais gali tekti rankiniu būdu nurodyti identifikatorių. Pavyzdys: `{url}`"
+    },
     "options": {
       "boolean": {
         "no": "ne",
@@ -616,6 +643,8 @@
       "maximumCurrentHelp": "Turi būti didesnė nei minimali srovė.",
       "maximumPhases": "Maksimalus fazių skaičius",
       "maximumPhasesHelp": "Kiek fazių įkrovimui gali panaudoti šis automobilis? Naudojama norint apskaičiuoti reikiamą minimalų saulės energijos perteklių ir planuoti trukmę.",
+      "maximumPower": "Didžiausia įkrovimo galia",
+      "maximumPowerHelp": "Maksimali galia, kurią gali paimti automobilis",
       "minimumCurrent": "Minimali srovė",
       "minimumCurrentHelp": "Ne mažiau 6A. Nebent tiksliai žinote, ką darote.",
       "online": "Automobiliai su internetiniu API",
