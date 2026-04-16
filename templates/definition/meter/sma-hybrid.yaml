@@ -206,7 +206,6 @@ render: |
   batterymode:
     source: watchdog
     timeout: {{ .watchdog }}
-    reset: 1 # reset watchdog on normal
     set:
       source: switch
       switch:
