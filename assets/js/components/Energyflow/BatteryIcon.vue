@@ -11,6 +11,11 @@
 			d="M21.956,26.739l0,8.261l4.088,0l0,-8.261l3.066,3.033l2.89,-2.859l-8,-7.913l-8,7.913l2.89,2.859l3.066,-3.033Z"
 		/>
 		<path
+			v-else-if="discharge"
+			fill="currentColor"
+			d="M21.956,27.261l0,-8.261l4.088,0l0,8.261l3.066,-3.033l2.89,2.859l-8,7.913l-8,-7.913l2.89,-2.859l3.066,3.033Z"
+		/>
+		<path
 			v-else-if="hold"
 			fill="currentColor"
 			d="M21.943,22.053l0,9.943l-3,0l0,-9.943l3,-0Zm7,-0l0,9.943l-3,-0l0,-9.943l3,-0Z"
@@ -29,6 +34,7 @@ export default defineComponent({
 	props: {
 		soc: { type: Number, default: 0 },
 		hold: { type: Boolean, default: false },
+		discharge: { type: Boolean, default: false },
 		gridCharge: { type: Boolean, default: false },
 	},
 	computed: {

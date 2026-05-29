@@ -28,6 +28,7 @@
 				:batteryDischarge="batteryDischarge"
 				:batteryGridCharge="batteryGridChargeActive"
 				:batteryHold="batteryHold"
+				:batteryDischargeForced="batteryDischargeForced"
 				:pvProduction="pvProduction"
 				:homePower="homePower"
 				:batterySoc="batterySoc"
@@ -124,6 +125,7 @@
 								:powerUnit="powerUnit"
 								:iconProps="{
 									hold: batteryHold,
+									discharge: batteryDischargeForced,
 									soc: batterySoc,
 									gridCharge: batteryGridChargeActive,
 								}"
@@ -426,6 +428,9 @@ export default defineComponent({
 			);
 		},
 		batteryDischargeLabel() {
+			if (this.batteryDischargeForced) {
+				return this.$t("main.energyflow.batteryForcedDischarge");
+			}
 			return this.$t(
 				`main.energyflow.battery${this.batteryHold ? "DischargeHold" : "Discharge"}`
 			);
@@ -435,6 +440,9 @@ export default defineComponent({
 		},
 		batteryChargeHold() {
 			return this.batteryMode === "holdcharge";
+		},
+		batteryDischargeForced() {
+			return this.batteryMode === "discharge";
 		},
 		consumption() {
 			return this.homePower + this.batteryCharge + this.loadpointsPower;

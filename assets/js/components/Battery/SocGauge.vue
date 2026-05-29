@@ -27,7 +27,7 @@
 			<shopicon-regular-powersupply
 				size="s"
 				class="layer grid-icon"
-				:class="{ 'layer--active': mode === BATTERY_MODE.CHARGE }"
+				:class="{ 'layer--active': isGridExchange }"
 			></shopicon-regular-powersupply>
 			<ArrowDown
 				:size="ICON_SIZE.M"
@@ -70,6 +70,7 @@ const LOCKED_MODES: BATTERY_MODE[] = [
 	BATTERY_MODE.HOLD,
 	BATTERY_MODE.HOLDCHARGE,
 	BATTERY_MODE.CHARGE,
+	BATTERY_MODE.DISCHARGE,
 ];
 
 // all four icon layers stay mounted and cross-fade via opacity/scale, so switching state
@@ -89,6 +90,10 @@ export default defineComponent({
 	computed: {
 		isLocked(): boolean {
 			return LOCKED_MODES.includes(this.mode as BATTERY_MODE);
+		},
+		// forced grid exchange in either direction shares the grid icon
+		isGridExchange(): boolean {
+			return this.mode === BATTERY_MODE.CHARGE || this.mode === BATTERY_MODE.DISCHARGE;
 		},
 		isCharging(): boolean {
 			return !this.isLocked && this.power < -50;

@@ -2844,7 +2844,8 @@
           "normal",
           "hold",
           "charge",
-          "holdcharge"
+          "holdcharge",
+          "discharge"
         ]
       },
       "ChargeMode": {
@@ -5601,9 +5602,9 @@
           "application/json": {
             "schema": {
               "type": "integer",
-              "description": "Battery mode. 0: unknown, 1: normal, 2: hold, 3: charge, 4: holdcharge",
+              "description": "Battery mode. 0: unknown, 1: normal, 2: hold, 3: charge, 4: holdcharge, 5: discharge",
               "minimum": 0,
-              "maximum": 4
+              "maximum": 5
             }
           }
         }

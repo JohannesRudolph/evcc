@@ -36,6 +36,7 @@ const scenarios = [
   { label: "hold", power: 0, mode: BATTERY_MODE.HOLD },
   { label: "holdcharge", power: 0, mode: BATTERY_MODE.HOLDCHARGE },
   { label: "charge", power: -800, mode: BATTERY_MODE.CHARGE },
+  { label: "discharge", power: 800, mode: BATTERY_MODE.DISCHARGE },
 ];
 
 export const AllStates = () => ({

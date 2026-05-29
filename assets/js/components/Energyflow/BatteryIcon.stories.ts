@@ -50,5 +50,8 @@ Soc90.args = { soc: 90 };
 export const Hold = Template.bind({});
 Hold.args = { hold: true };
 
+export const Discharge = Template.bind({});
+Discharge.args = { discharge: true };
+
 export const GridCharge = Template.bind({});
 GridCharge.args = { gridCharge: true };

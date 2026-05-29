@@ -839,6 +839,7 @@ export enum BATTERY_MODE {
   HOLD = "hold",
   CHARGE = "charge",
   HOLDCHARGE = "holdcharge",
+  DISCHARGE = "discharge",
 }
 
 export enum PHASES {

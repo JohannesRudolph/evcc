@@ -196,11 +196,13 @@ func TestRequiredBatteryMode(t *testing.T) {
 		{false, api.BatteryNormal, api.BatteryUnknown},  // ignore
 		{false, api.BatteryHold, api.BatteryNormal},
 		{false, api.BatteryCharge, api.BatteryNormal},
+		{false, api.BatteryDischarge, api.BatteryNormal},
 
 		{true, api.BatteryUnknown, api.BatteryCharge},
 		{true, api.BatteryNormal, api.BatteryCharge},
 		{true, api.BatteryHold, api.BatteryCharge},
 		{true, api.BatteryCharge, api.BatteryUnknown}, // ignore
+		{true, api.BatteryDischarge, api.BatteryCharge},
 	}
 
 	{
