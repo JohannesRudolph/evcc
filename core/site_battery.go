@@ -62,8 +62,8 @@ func (site *Site) updateBatteryMode(batteryGridChargeActive bool, rate api.Rate)
 		batteryMode = api.BatteryHold
 	}
 
-	// NOTE: applyBatteryMode is always called when charge mode is active to validate max soc
-	if modeChanged := batteryMode != api.BatteryUnknown; modeChanged || site.batteryMode == api.BatteryCharge {
+	// NOTE: applyBatteryMode is always called when charge or discharge mode is active to validate soc limits
+	if modeChanged := batteryMode != api.BatteryUnknown; modeChanged || site.batteryMode == api.BatteryCharge || site.batteryMode == api.BatteryDischarge {
 		if err := site.applyBatteryMode(batteryMode); err == nil {
 			if modeChanged {
 				site.SetBatteryMode(batteryMode)
@@ -140,14 +140,47 @@ func (site *Site) batteryMaxSocReached(dev config.Device[api.Meter]) (bool, erro
 	return false, nil
 }
 
+// batteryMinSocReached checks if battery has reached min soc limit
+func (site *Site) batteryMinSocReached(dev config.Device[api.Meter]) (bool, error) {
+	meter := dev.Instance()
+
+	batLimiter, ok := api.Cap[api.BatterySocLimiter](meter)
+	if !ok {
+		return false, nil
+	}
+
+	batSoc, ok := api.Cap[api.Battery](meter)
+	if !ok {
+		return false, errors.New("battery with soc limits must have soc")
+	}
+
+	soc, err := batSoc.Soc()
+	if err != nil {
+		return false, err
+	}
+
+	if min, _ := batLimiter.GetSocLimits(); min > 0 && soc <= min {
+		site.log.DEBUG.Printf("battery %s: limit soc reached (%.0f <= %.0f)", deviceTitleOrName(dev), soc, min)
+		return true, nil
+	}
+
+	return false, nil
+}
+
 // applyBatteryMode applies the mode to each battery
 //
 // api.BatteryCharge:
 //
 //	The current soc is validated against max soc.
 //	In case max soc is reached, hold mode is applied.
+//
+// api.BatteryDischarge:
+//
+//	The current soc is validated against min soc.
+//	In case min soc is reached, hold mode is applied.
 func (site *Site) applyBatteryMode(mode api.BatteryMode) error {
 	fromToCharge := mode == api.BatteryCharge || mode == api.BatteryUnknown && site.batteryMode == api.BatteryCharge
+	fromToDischarge := mode == api.BatteryDischarge || mode == api.BatteryUnknown && site.batteryMode == api.BatteryDischarge
 
 	for _, dev := range site.batteryMeters {
 		meter := dev.Instance()
@@ -167,6 +200,19 @@ func (site *Site) applyBatteryMode(mode api.BatteryMode) error {
 			// put battery into hold mode when soc limit reached
 			if ok {
 				// TODO do this only once
+				mode = api.BatteryHold
+			}
+		}
+
+		// validate min soc
+		if fromToDischarge && mode != api.BatteryHold {
+			ok, err := site.batteryMinSocReached(dev)
+			if err != nil && !errors.Is(err, api.ErrNotAvailable) {
+				return err
+			}
+
+			// put battery into hold mode when min soc limit reached
+			if ok {
 				mode = api.BatteryHold
 			}
 		}

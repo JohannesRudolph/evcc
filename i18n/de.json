@@ -1156,6 +1156,7 @@
       "battery": "Batterie",
       "batteryCharge": "Batterie laden",
       "batteryDischarge": "Batterie entladen",
+      "batteryForcedDischarge": "Batterie entladen (erzwungen)",
       "batteryForecastEmpty": "Leer",
       "batteryForecastFull": "Voll",
       "batteryForecastNextHigh": "Hoch",

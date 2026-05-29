@@ -19,6 +19,7 @@ func TestApplyBatteryMode(t *testing.T) {
 		{api.BatteryNormal, api.BatteryUnknown},  // no change required
 		{api.BatteryHold, api.BatteryNormal},
 		{api.BatteryCharge, api.BatteryNormal},
+		{api.BatteryDischarge, api.BatteryNormal},
 	} {
 		t.Logf("%+v", tc)
 
@@ -218,6 +219,69 @@ func TestForcedBatteryChargeLimits(t *testing.T) {
 		}
 
 		site.updateBatteryMode(true, api.Rate{})
+
+		ctrl.Finish()
+	}
+}
+
+func TestForcedBatteryDischargeLimits(t *testing.T) {
+	minLimit := 20.0
+
+	for _, tc := range []struct {
+		internal, external, expected api.BatteryMode
+		soc                          float64
+	}{
+		// soc above min: discharge applied
+		{api.BatteryUnknown, api.BatteryDischarge, api.BatteryDischarge, 50},
+		{api.BatteryNormal, api.BatteryDischarge, api.BatteryDischarge, 50},
+		{api.BatteryHold, api.BatteryDischarge, api.BatteryDischarge, 50},
+
+		// soc at/below min: hold applied
+		{api.BatteryUnknown, api.BatteryDischarge, api.BatteryHold, 20},
+		{api.BatteryNormal, api.BatteryDischarge, api.BatteryHold, 10},
+
+		// already discharging, soc above min: no change
+		{api.BatteryDischarge, api.BatteryDischarge, api.BatteryUnknown, 50},
+		// already discharging, soc at/below min: hold
+		{api.BatteryDischarge, api.BatteryDischarge, api.BatteryHold, 15},
+	} {
+		t.Logf("%+v", tc)
+
+		ctrl := gomock.NewController(t)
+
+		var bat api.Meter
+		batSoc := api.NewMockBattery(ctrl)
+		batCon := api.NewMockBatteryController(ctrl)
+		batSocLimit := api.NewMockBatterySocLimiter(ctrl)
+
+		bat = &struct {
+			api.Meter
+			api.Battery
+			api.BatteryController
+			api.BatterySocLimiter
+		}{
+			Meter:             bat,
+			Battery:           batSoc,
+			BatteryController: batCon,
+			BatterySocLimiter: batSocLimit,
+		}
+
+		site := &Site{
+			log:           util.NewLogger("foo"),
+			batteryMeters: []config.Device[api.Meter]{config.NewStaticDevice(config.Named{}, bat)},
+			batteryMode:   tc.internal,
+		}
+
+		site.SetBatteryModeExternal(tc.external)
+
+		batSoc.EXPECT().Soc().Return(tc.soc, nil).Times(1)
+		batSocLimit.EXPECT().GetSocLimits().Return(minLimit, 0.0).Times(1)
+
+		if tc.expected != api.BatteryUnknown {
+			batCon.EXPECT().SetBatteryMode(tc.expected).Times(1)
+		}
+
+		site.updateBatteryMode(false, api.Rate{})
 
 		ctrl.Finish()
 	}

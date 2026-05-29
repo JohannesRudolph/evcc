@@ -10,6 +10,12 @@
 			fill="currentColor"
 			d="M21.956,26.739l0,8.261l4.088,0l0,-8.261l3.066,3.033l2.89,-2.859l-8,-7.913l-8,7.913l2.89,2.859l3.066,-3.033Z"
 		/>
+		<!-- discharge: forced discharge — bold down arrow -->
+		<g v-else-if="discharge" fill="currentColor">
+			<path
+				d="M21.956,27.261l0,-8.261l4.088,0l0,8.261l3.066,-3.033l2.89,2.859l-8,7.913l-8,-7.913l2.89,-2.859l3.066,3.033Z"
+			/>
+		</g>
 		<!-- hold: discharge disabled — down arrow with strike-through -->
 		<g v-else-if="hold" fill="currentColor">
 			<path
@@ -39,6 +45,7 @@ export default defineComponent({
 		soc: { type: Number, default: 0 },
 		hold: { type: Boolean, default: false },
 		noCharge: { type: Boolean, default: false },
+		discharge: { type: Boolean, default: false },
 		gridCharge: { type: Boolean, default: false },
 	},
 	computed: {
