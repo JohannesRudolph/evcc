@@ -1,10 +1,14 @@
 # STEP 1 build ui
 FROM --platform=$BUILDPLATFORM node:26-alpine AS node
 
+# pin the install root: since vite-plus 0.3.0 a fresh install picks the XDG split
+# layout (~/.local/share/vite-plus), so ~/.vite-plus can no longer be assumed
+ENV VP_HOME=/opt/vite-plus
+
 RUN apk update && apk add --no-cache make curl bash && curl -fsSL https://vite.plus | bash
 
 # the installer only wires vp into interactive shell rc files, which RUN steps don't source
-ENV PATH="/root/.vite-plus/bin:${PATH}"
+ENV PATH="${VP_HOME}/bin:${PATH}"
 
 WORKDIR /build
 
